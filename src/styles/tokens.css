@@ -1,0 +1,202 @@
+:root {
+  --font-label: "Montserrat", "Noto Sans Thai", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-label);
+
+  --clinical-bg: oklch(0.972 0.01 238);
+  --clinical-panel: oklch(0.996 0.002 238);
+  --clinical-panel-soft: oklch(0.958 0.012 242 / 0.78);
+  --clinical-glass: oklch(1 0 0 / 0.78);
+  --clinical-silver: oklch(0.924 0.014 244);
+  --clinical-silver-strong: oklch(0.82 0.022 246);
+  --clinical-blue: oklch(0.5 0.14 248);
+  --clinical-blue-soft: oklch(0.72 0.095 240);
+  --clinical-gold: oklch(0.72 0.12 82);
+  --clinical-ink: oklch(0.18 0.032 252);
+  --clinical-muted: oklch(0.42 0.034 248);
+  --clinical-danger: oklch(0.55 0.19 28);
+  --clinical-success: oklch(0.32 0.12 154);
+  --clinical-warning: oklch(0.44 0.1 82);
+  --clinical-shadow: oklch(0.38 0.045 248 / 0.12);
+
+  --surface-border: oklch(0.895 0.016 244);
+  --surface-border-strong: oklch(0.83 0.02 244);
+  --focus-ring: oklch(0.66 0.12 248 / 0.58);
+  --control-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --space-dashboard: 24px;
+
+}
+
+html,
+body {
+  background: var(--clinical-bg);
+}
+
+body {
+  margin: 0;
+  color: var(--clinical-ink);
+  font-family: var(--font-label);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.golden-shell {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  color: var(--clinical-ink);
+  font-family: var(--font-label);
+  background: linear-gradient(180deg, oklch(0.995 0.003 238), var(--clinical-bg));
+}
+
+.golden-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, oklch(0.78 0.025 244 / 0.22) 1px, transparent 1px),
+    linear-gradient(0deg, oklch(0.78 0.025 244 / 0.18) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mix-blend-mode: multiply;
+  opacity: 0.42;
+}
+
+.golden-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  border-bottom: 1px solid oklch(0.88 0.018 244);
+  padding: 1rem 1.5rem;
+  background: linear-gradient(180deg, oklch(1 0 0 / 0.88), oklch(0.965 0.012 242 / 0.82));
+  box-shadow: 0 4px 8px var(--clinical-shadow);
+  backdrop-filter: blur(20px);
+}
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.brand-mark {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border-radius: var(--radius-lg);
+  color: oklch(0.48 0.1 82);
+  background: linear-gradient(145deg, oklch(1 0 0), oklch(0.94 0.045 86));
+  box-shadow: 0 4px 8px var(--clinical-shadow);
+}
+
+.brand-title,
+.lux-title,
+.golden-shell h1,
+.golden-shell h2,
+.golden-shell h3,
+.golden-shell h4 {
+  color: var(--clinical-ink);
+  font-family: var(--font-label);
+  font-weight: 850;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.brand-title {
+  margin: 0.1rem 0 0;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.lux-title {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 2.25rem;
+  line-height: 1.16;
+}
+
+.section-kicker {
+  margin: 0;
+  color: var(--clinical-blue);
+  font-family: var(--font-label);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.golden-nav {
+  display: flex;
+  gap: 0.35rem;
+  border: 1px solid oklch(0.88 0.018 244);
+  border-radius: 999px;
+  padding: 0.35rem;
+  background: oklch(0.94 0.018 242 / 0.82);
+  box-shadow: 0 4px 8px var(--clinical-shadow);
+}
+
+.golden-nav-button {
+  display: inline-flex;
+  min-width: 7.75rem;
+  min-height: 2.9rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.65rem 1rem;
+  color: var(--clinical-ink);
+  font-weight: 850;
+  line-height: 1;
+}
+
+.golden-nav-button.is-active {
+  color: var(--clinical-ink);
+  background: linear-gradient(135deg, oklch(0.91 0.06 86), var(--clinical-gold));
+}
+
+@media (max-width: 700px) {
+  .golden-topbar {
+    align-items: flex-start;
+    padding: 0.9rem;
+  }
+
+  .golden-nav {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .golden-nav-button {
+    width: 100%;
+  }
+
+  .lux-title {
+    font-size: 1.55rem;
+  }
+}

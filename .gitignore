@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.env
+.env.*
+storage/
+tmp/
+*.local
+*.webm
+*.mp4
+.agents/
+.claude/
+.codex/
+.gemini/
+.impeccable/
