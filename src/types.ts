@@ -131,5 +131,26 @@ export interface AssessmentSession {
   metrics: SessionMetrics;
   consent: ConsentState;
   videoRecorded: boolean;
-  source: "camera" | "demo";
+  source: "camera" | "demo" | "video";
+  videoAnalysis?: VideoAnalysisResult;
+}
+
+export interface VideoAnalysisResult {
+  fps: number;
+  durationSec: number;
+  totalSampledFrames: number;
+  /** Seconds of video time each analyzed frame represents (varies by playback method). */
+  avgSecPerAnalyzedFrame: number;
+  leftFrameCount: number;
+  rightFrameCount: number;
+  leftUsagePercent: number;
+  rightUsagePercent: number;
+  zoneCounts: { left: Record<number, number>; right: Record<number, number> };
+  leftReachCount: number;
+  rightReachCount: number;
+  leftAvgFramesPerReach: number;
+  rightAvgFramesPerReach: number;
+  fasterArm: "left" | "right" | "equal";
+  logitProbability: number;
+  dominantArm: "left" | "right" | "ambidextrous";
 }

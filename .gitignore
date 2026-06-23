@@ -8,6 +8,10 @@ tmp/
 *.local
 *.webm
 *.mp4
+__pycache__/
+*.pyc
+bridge/.venv/
+notebooklm-py/
 .agents/
 .claude/
 .codex/

@@ -750,6 +750,146 @@
   line-height: 1.55;
 }
 
+/* ── NotebookLM generate button ──────────────────────────── */
+.insight-generate-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.68rem 1.1rem;
+  width: 100%;
+  justify-content: center;
+  border: 1.5px dashed oklch(0.74 0.08 68);
+  border-radius: var(--radius-md);
+  background: oklch(0.96 0.025 74 / 0.55);
+  color: oklch(0.40 0.13 52);
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  letter-spacing: -0.01em;
+}
+
+.insight-generate-btn:hover {
+  background: oklch(0.92 0.05 74 / 0.8);
+  border-color: oklch(0.58 0.14 52);
+  color: oklch(0.30 0.15 38);
+}
+
+.insight-generate-btn__sub {
+  font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 0.7;
+  margin-left: 0.2rem;
+}
+
+/* ── Regen icon button ────────────────────────────────────── */
+.insight-regen-btn {
+  flex-shrink: 0;
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 999px;
+  background: oklch(0.91 0.04 74);
+  color: oklch(0.44 0.12 52);
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s;
+}
+
+.insight-regen-btn:hover {
+  background: oklch(0.85 0.07 68);
+  color: oklch(0.30 0.15 38);
+}
+
+/* ── Loading state ────────────────────────────────────────── */
+.insight-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 2rem 1rem;
+  text-align: center;
+  color: oklch(0.44 0.12 52);
+}
+
+.insight-loading p {
+  margin: 0;
+  font-size: 0.96rem;
+  font-weight: 800;
+}
+
+.insight-loading span {
+  font-size: 0.76rem;
+  font-weight: 600;
+  opacity: 0.65;
+}
+
+.insight-spinner {
+  animation: spin 1s linear infinite;
+  color: oklch(0.55 0.14 52);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+/* ── Error state ──────────────────────────────────────────── */
+.insight-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 0.75rem 0.5rem;
+  text-align: center;
+  color: var(--clinical-danger);
+}
+
+.insight-error > svg { opacity: 0.72; }
+
+.insight-error p {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: oklch(0.38 0.12 28);
+}
+
+/* ── NLM result sections ──────────────────────────────────── */
+.insight-nlm-result {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.insight-section__heading {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.62rem;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.insight-section--solutions .insight-section__heading {
+  color: oklch(0.36 0.12 154);
+}
+
+.insight-section--watchout .insight-section__heading {
+  color: oklch(0.48 0.16 38);
+}
+
+.insight-section--watchout .insight-list li > span.insight-warn-icon {
+  color: oklch(0.48 0.16 38);
+  background: oklch(0.94 0.05 38);
+}
+
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 1180px) {
   .bento-dashboard-layout {

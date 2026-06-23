@@ -17,6 +17,7 @@ import {
   RefreshCcw,
   SkipForward,
   Square,
+  Video,
   Volume2,
 } from "lucide-react";
 import { MetricBar } from "../components/MetricBar";
@@ -69,6 +70,7 @@ export function AssessmentPage({
   trialResultsLength,
   videoRef,
   voiceEnabled,
+  onStartVideoUpload,
 }: {
   activeSession: AssessmentSession | null;
   activeZoneStyle: CSSProperties;
@@ -112,6 +114,7 @@ export function AssessmentPage({
   trialResultsLength: number;
   videoRef: RefObject<HTMLVideoElement | null>;
   voiceEnabled: boolean;
+  onStartVideoUpload: () => void;
 }) {
   return (
     <>
@@ -202,6 +205,13 @@ export function AssessmentPage({
                   <Play size={20} />
                   ใช้สัญญาณสาธิต
                 </button>
+                <div style={{ borderTop: "1px solid var(--clinical-border)", paddingTop: "0.75rem", marginTop: "0.25rem" }}>
+                  <button className={ui.secondaryButton} onClick={onStartVideoUpload} type="button" style={{ width: "100%" }}>
+                    <Video size={20} />
+                    วิเคราะห์จากวิดีโอ
+                    <span style={{ fontSize: "0.72rem", opacity: 0.65, marginLeft: "0.25rem" }}>· Video Upload</span>
+                  </button>
+                </div>
               </div>
             </aside>
           </section>

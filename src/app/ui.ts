@@ -1,7 +1,7 @@
 import type { ConsentState } from "../types";
 
 export type Role = "patient" | "doctor";
-export type PatientStage = "login" | "profile" | "calibration" | "assessment" | "results";
+export type PatientStage = "login" | "profile" | "calibration" | "assessment" | "results" | "video-upload";
 
 export const PROMPT_COUNT = 60;
 

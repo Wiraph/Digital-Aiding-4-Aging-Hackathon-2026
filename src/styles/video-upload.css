@@ -1,0 +1,451 @@
+/* ── Video Upload Page ─────────────────────────────────────── */
+.video-upload-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 2rem 1rem;
+}
+
+.video-upload-card {
+  background: var(--clinical-surface);
+  border: 1px solid var(--clinical-border);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(42, 28, 8, 0.13);
+  padding: 2rem 2.2rem 2.4rem;
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+/* Wider card during processing and done states */
+.video-upload-card:has(.video-processing),
+.video-upload-card:has(.video-done) {
+  max-width: 700px;
+}
+
+/* Header */
+.video-upload-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.video-upload-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: oklch(0.96 0.04 72);
+  border: 1.5px solid var(--clinical-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: oklch(0.52 0.13 52);
+  flex-shrink: 0;
+}
+
+.video-upload-kicker {
+  margin: 0 0 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: oklch(0.55 0.13 52);
+}
+
+.video-upload-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--clinical-ink);
+  line-height: 1.2;
+}
+
+.video-upload-back {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1.5px solid var(--clinical-border);
+  background: transparent;
+  color: var(--clinical-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.video-upload-back:hover {
+  background: oklch(0.94 0.03 72);
+  color: var(--clinical-ink);
+}
+
+/* Drop zone */
+.video-drop-zone {
+  border: 2px dashed var(--clinical-border);
+  border-radius: 16px;
+  padding: 2.4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  background: oklch(0.985 0.015 72);
+}
+
+.video-drop-zone:hover,
+.video-drop-zone.is-drag-over {
+  border-color: oklch(0.55 0.13 52);
+  background: oklch(0.97 0.03 72);
+}
+
+.video-drop-icon {
+  color: oklch(0.6 0.1 52);
+  margin-bottom: 0.3rem;
+}
+
+.video-drop-main {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--clinical-ink);
+}
+
+.video-drop-sub {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--clinical-muted);
+}
+
+.video-drop-badge {
+  margin-top: 0.5rem;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 99px;
+  background: oklch(0.93 0.06 72);
+  color: oklch(0.44 0.12 52);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+/* Hints */
+.video-upload-hints {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.video-upload-hints p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--clinical-muted);
+  line-height: 1.5;
+}
+
+/* ── Processing ─────────────────────────────────────────────── */
+.video-processing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  text-align: center;
+}
+
+/* Live canvas preview */
+.video-preview-wrap {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid var(--clinical-border);
+  background: oklch(0.10 0.02 40);
+  position: relative;
+}
+
+.video-preview-canvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  display: block;
+  object-fit: cover;
+}
+
+.video-preview-legend {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  padding: 0.45rem 1rem;
+  background: oklch(0.12 0.02 40 / 0.88);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.vpl-left    { color: #f2a52b; }
+.vpl-right   { color: #c45a1f; }
+.vpl-zone    { color: oklch(0.75 0.06 72); }
+.vpl-reached { color: #3cb450; }
+
+/* Progress bar */
+.video-proc-bar-wrap {
+  width: 100%;
+  height: 8px;
+  border-radius: 99px;
+  background: oklch(0.92 0.04 72);
+  overflow: hidden;
+  margin-top: 0.2rem;
+}
+
+.video-proc-bar {
+  height: 100%;
+  width: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, oklch(0.62 0.14 52), oklch(0.72 0.16 72));
+  transform-origin: left;
+  transform: scaleX(var(--bar-pct, 0));
+  transition: transform 0.4s ease;
+}
+
+.video-proc-file {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--clinical-muted);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.video-proc-status {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--clinical-ink);
+}
+
+.video-proc-pct {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: oklch(0.52 0.13 52);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.video-proc-note {
+  margin: 0;
+  font-size: 0.73rem;
+  color: var(--clinical-muted);
+}
+
+/* ── Done — clinical summary ───────────────────────────────── */
+.video-done {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.video-done-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.video-done-icon {
+  color: oklch(0.55 0.16 145);
+  flex-shrink: 0;
+}
+
+.video-done-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--clinical-ink);
+}
+
+/* Dominant arm block */
+.video-insight-block {
+  background: oklch(0.96 0.04 72);
+  border: 1px solid var(--clinical-border);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.video-insight-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vi-label {
+  font-size: 0.8rem;
+  color: var(--clinical-muted);
+  font-weight: 600;
+}
+
+.vi-val {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--clinical-ink);
+}
+
+.vi-dominant {
+  color: oklch(0.44 0.14 52);
+  font-size: 1rem;
+}
+
+.vi-note {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--clinical-muted);
+  line-height: 1.5;
+  border-top: 1px solid var(--clinical-border);
+  padding-top: 0.45rem;
+}
+
+/* Stats 2×2 grid */
+.video-done-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.vdg-section {
+  background: var(--clinical-surface);
+  border: 1px solid var(--clinical-border);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.vdg-heading {
+  margin: 0 0 0.2rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: oklch(0.55 0.13 52);
+}
+
+.vdg-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.vdg-row span {
+  color: var(--clinical-muted);
+  font-weight: 500;
+}
+
+.vdg-row strong {
+  color: var(--clinical-ink);
+  font-weight: 700;
+  text-align: right;
+}
+
+.vdg-faster span { color: oklch(0.44 0.14 52); font-weight: 700; }
+.vdg-faster strong { color: oklch(0.44 0.14 52); }
+
+/* LNU risk badge */
+.video-lnu-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: 12px;
+  border: 1.5px solid;
+}
+
+.video-lnu-badge.lnu-good {
+  background: oklch(0.96 0.04 145);
+  border-color: oklch(0.82 0.1 145);
+}
+
+.video-lnu-badge.lnu-moderate {
+  background: oklch(0.97 0.05 75);
+  border-color: oklch(0.82 0.12 72);
+}
+
+.video-lnu-badge.lnu-risk {
+  background: oklch(0.97 0.04 22);
+  border-color: oklch(0.80 0.14 22);
+}
+
+.vlnu-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.lnu-good    .vlnu-label { color: oklch(0.40 0.14 145); }
+.lnu-moderate .vlnu-label { color: oklch(0.44 0.14 60); }
+.lnu-risk    .vlnu-label { color: oklch(0.40 0.16 22); }
+
+.vlnu-val {
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.lnu-good    .vlnu-val { color: oklch(0.35 0.12 145); }
+.lnu-moderate .vlnu-val { color: oklch(0.38 0.12 55); }
+.lnu-risk    .vlnu-val { color: oklch(0.38 0.15 22); }
+
+.video-done-btn {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+/* ── Error ──────────────────────────────────────────────────── */
+.video-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.video-error-icon {
+  color: oklch(0.55 0.18 22);
+}
+
+.video-error-msg {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--clinical-ink);
+  max-width: 360px;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 680px) {
+  .video-upload-card {
+    padding: 1.4rem 1.2rem 1.8rem;
+    border-radius: 16px;
+  }
+
+  .video-done-grid {
+    grid-template-columns: 1fr;
+  }
+}

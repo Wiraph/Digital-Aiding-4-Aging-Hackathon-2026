@@ -8,7 +8,7 @@
   type MouseEvent,
 } from "react";
 import { Camera, CheckCircle2, HeartPulse, Home, LayoutDashboard, Play } from "lucide-react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, MotionConfig } from "framer-motion";
 import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { PROMPT_COUNT, defaultConsent, ui, type PatientStage, type Role } from "./app/ui";
 import { PageWrapper } from "./components/PageWrapper";
@@ -39,6 +39,7 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { AssessmentPage } from "./pages/AssessmentPage";
+import { VideoUploadZone } from "./components/VideoUploadZone";
 import type {
   AssessmentSession,
   ConsentState,
@@ -298,6 +299,17 @@ export default function App() {
     [camera, consent, navigate, prompts.length, refreshSessions, stopRecorder],
   );
 
+  const finishVideoSession = useCallback(
+    (session: AssessmentSession) => {
+      if (consent.localData) saveSession(session);
+      refreshSessions(session);
+      setActiveSessionId(session.id);
+      setStage("results");
+      navigate("/patient");
+    },
+    [consent.localData, navigate, refreshSessions],
+  );
+
   const beginAssessment = useCallback(
     (forceDemo = false) => {
       const sourceIsDemo = forceDemo || camera.status !== "ready";
@@ -531,6 +543,7 @@ export default function App() {
   }
 
   return (
+    <MotionConfig reducedMotion="never">
     <main className={ui.appShell}>
       <header className={ui.topbar}>
         <div className={ui.brandLockup}>
@@ -649,7 +662,16 @@ export default function App() {
             />
           ) : null}
 
-          {stage !== "login" && stage !== "profile" ? (
+          {stage === "video-upload" ? (
+            <VideoUploadZone
+              profile={assessmentProfileRef.current}
+              consent={consent}
+              onComplete={finishVideoSession}
+              onBack={() => setStage("calibration")}
+            />
+          ) : null}
+
+          {stage !== "login" && stage !== "profile" && stage !== "video-upload" ? (
             <AssessmentPage
               activeSession={activeSession}
               activeZoneStyle={activeZoneStyle}
@@ -688,6 +710,10 @@ export default function App() {
               trialResultsLength={trialResults.length}
               videoRef={videoRef}
               voiceEnabled={voiceEnabled}
+              onStartVideoUpload={() => {
+                commitCurrentProfile();
+                setStage("video-upload");
+              }}
             />
           ) : null}
 
@@ -717,6 +743,7 @@ export default function App() {
         </Routes>
       </AnimatePresence>
     </main>
+    </MotionConfig>
   );
 }
 

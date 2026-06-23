@@ -1,17 +1,22 @@
 import { type CSSProperties, type ReactNode, useState } from "react";
 import {
   Activity,
+  AlertTriangle,
   ArrowDownRight,
   ArrowUpRight,
   Brain,
   CheckCircle2,
   ClipboardList,
   Download,
+  Loader2,
   Play,
+  RefreshCw,
   Sparkles,
   TrendingUp,
   Trash2,
+  WifiOff,
 } from "lucide-react";
+import { askNotebookLM, type NlmResult } from "../lib/notebooklm";
 import { AnimatedBentoCard } from "../components/motion/AnimatedBentoCard";
 import { AnimatedBentoContainer } from "../components/motion/AnimatedBentoContainer";
 import { ZONES } from "../lib/assessment";
@@ -408,15 +413,17 @@ function MovementHeatmapBento({ session }: { session: AssessmentSession }) {
   );
 }
 
+type InsightState =
+  | { phase: "idle" }
+  | { phase: "loading" }
+  | { phase: "success"; result: NlmResult }
+  | { phase: "error"; message: string };
+
 function AIClinicalInsightsBento({ session }: { session: AssessmentSession }) {
+  const [state, setState] = useState<InsightState>({ phase: "idle" });
   const stats = dominanceStats(session.metrics);
-  const confidence =
-    session.metrics.trackingQuality >= 85
-      ? "High confidence tracking quality supports using this session as follow-up evidence."
-      : session.metrics.trackingQuality >= 70
-        ? "Tracking quality is usable, with a same-lighting retest recommended for trend confirmation."
-        : "Repeat the session before making high-confidence clinical comparisons.";
-  const insights = [
+
+  const fallbackInsights = [
     {
       icon: <CheckCircle2 size={18} />,
       text: `${stats.dominantArm} during free reach behavior; monitor ${stats.weakerArm} for avoidance patterns.`,
@@ -427,9 +434,24 @@ function AIClinicalInsightsBento({ session }: { session: AssessmentSession }) {
     },
     {
       icon: <Brain size={18} />,
-      text: confidence,
+      text:
+        session.metrics.trackingQuality >= 85
+          ? "High confidence tracking quality supports using this session as follow-up evidence."
+          : session.metrics.trackingQuality >= 70
+            ? "Tracking quality is usable — same-lighting retest recommended."
+            : "Repeat session before making high-confidence clinical comparisons.",
     },
   ];
+
+  async function generate() {
+    setState({ phase: "loading" });
+    try {
+      const result = await askNotebookLM(session);
+      setState({ phase: "success", result });
+    } catch (err) {
+      setState({ phase: "error", message: err instanceof Error ? err.message : String(err) });
+    }
+  }
 
   return (
     <AnimatedBentoCard className="insight-bento">
@@ -439,15 +461,88 @@ function AIClinicalInsightsBento({ session }: { session: AssessmentSession }) {
           <span>Clinical Insights</span>
           <h3>AI Summary for Follow-up</h3>
         </div>
+        {state.phase === "success" && (
+          <button
+            aria-label="สร้างใหม่"
+            className="insight-regen-btn"
+            onClick={generate}
+            title="สร้างใหม่"
+            type="button"
+          >
+            <RefreshCw size={14} />
+          </button>
+        )}
       </div>
-      <ul className="insight-list">
-        {insights.map((insight) => (
-          <li key={insight.text}>
-            <span>{insight.icon}</span>
-            <p>{insight.text}</p>
-          </li>
-        ))}
-      </ul>
+
+      {state.phase === "idle" && (
+        <>
+          <ul className="insight-list">
+            {fallbackInsights.map((item) => (
+              <li key={item.text}>
+                <span>{item.icon}</span>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ul>
+          <button className="insight-generate-btn" onClick={generate} type="button">
+            <Sparkles size={15} />
+            วิเคราะห์ด้วย NotebookLM
+            <span className="insight-generate-btn__sub">Generate AI Summary</span>
+          </button>
+        </>
+      )}
+
+      {state.phase === "loading" && (
+        <div className="insight-loading">
+          <Loader2 size={28} className="insight-spinner" />
+          <p>กำลังประมวลผล…</p>
+          <span>Analyzing session data</span>
+        </div>
+      )}
+
+      {state.phase === "error" && (
+        <div className="insight-error">
+          <WifiOff size={24} />
+          <p>{state.message}</p>
+          <button className="insight-generate-btn" onClick={generate} type="button">
+            <RefreshCw size={14} />
+            ลองใหม่อีกครั้ง · Retry
+          </button>
+        </div>
+      )}
+
+      {state.phase === "success" && (
+        <div className="insight-nlm-result">
+          <div className="insight-section insight-section--solutions">
+            <div className="insight-section__heading">
+              <CheckCircle2 size={15} />
+              แนวทางแก้ไข · Solutions
+            </div>
+            <ul className="insight-list">
+              {state.result.solutions.map((text, i) => (
+                <li key={i}>
+                  <span><CheckCircle2 size={18} /></span>
+                  <p>{text}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="insight-section insight-section--watchout">
+            <div className="insight-section__heading">
+              <AlertTriangle size={15} />
+              สิ่งที่ต้องระวัง · Watch Out
+            </div>
+            <ul className="insight-list">
+              {state.result.watchOut.map((text, i) => (
+                <li key={i}>
+                  <span className="insight-warn-icon"><AlertTriangle size={18} /></span>
+                  <p>{text}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
     </AnimatedBentoCard>
   );
 }
@@ -517,7 +612,11 @@ export function DashboardPage({
               value={Math.round(activeSession.metrics.learnedNonUseRiskIndex)}
             />
             <MicroMetricCard
-              detail={`${activeSession.trials.length}/${activeSession.promptsTotal} targets`}
+              detail={
+                activeSession.source === "video" && activeSession.videoAnalysis
+                  ? `${activeSession.videoAnalysis.leftReachCount + activeSession.videoAnalysis.rightReachCount} reach events · ${activeSession.promptsTotal}/9 zones`
+                  : `${activeSession.trials.length}/${activeSession.promptsTotal} targets`
+              }
               icon={<CheckCircle2 size={21} />}
               label="Completion Rate"
               tone="completion"
