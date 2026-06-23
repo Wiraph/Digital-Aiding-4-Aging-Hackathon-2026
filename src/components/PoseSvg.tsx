@@ -84,20 +84,16 @@ export function PoseSvg({
     const stylePoint = point(item);
     if (!stylePoint) return null;
     const isLeft = className === "left-hand";
-    const labelX = Math.min(
-      94,
-      Math.max(6, stylePoint.x + (isLeft ? -15 : 15)),
-    );
-    const labelAnchor =
-      labelX < 12 ? "start" : labelX > 88 ? "end" : "middle";
+    const labelX = Math.min(90, Math.max(10, stylePoint.x + (isLeft ? -8 : 8)));
+    const labelAnchor = isLeft ? "end" : "start";
     const dots = [
-      { dx: -5.4, dy: -2.4, r: 1.55 },
-      { dx: -2.2, dy: -4, r: 1.7 },
-      { dx: 1.8, dy: -4.2, r: 1.72 },
-      { dx: 5.1, dy: -2.6, r: 1.56 },
-      { dx: -3.6, dy: 2.2, r: 1.9 },
-      { dx: 0, dy: 0.5, r: 2.9 },
-      { dx: 3.9, dy: 2.1, r: 1.9 },
+      { dx: -2.8, dy: -1.5, r: 0.95 },
+      { dx: -1.1, dy: -2.5, r: 1.05 },
+      { dx: 1.1, dy: -2.5, r: 1.05 },
+      { dx: 2.8, dy: -1.5, r: 0.95 },
+      { dx: -1.9, dy: 1.2, r: 1.15 },
+      { dx: 0, dy: 0.5, r: 1.8 },
+      { dx: 1.9, dy: 1.2, r: 1.15 },
     ];
 
     return (
@@ -106,19 +102,20 @@ export function PoseSvg({
           className="hand-aura"
           cx={stylePoint.x}
           cy={stylePoint.y}
-          r={clinical ? "8.7" : "6.8"}
+          r={clinical ? "7.2" : "5.6"}
           vectorEffect="non-scaling-stroke"
         />
         <circle
           className="hand-halo"
           cx={stylePoint.x}
           cy={stylePoint.y}
-          r={clinical ? "10.3" : "7.6"}
+          r={clinical ? "8.8" : "6.8"}
           vectorEffect="non-scaling-stroke"
         />
         <g className="hand-dots">
           {dots.map((dot, index) => (
             <circle
+              className="hand-dot"
               cx={stylePoint.x + dot.dx}
               cy={stylePoint.y + dot.dy}
               key={`${className}-${index}`}
@@ -127,6 +124,14 @@ export function PoseSvg({
             />
           ))}
         </g>
+        <rect
+          className="hand-label-bg"
+          height="4.8"
+          rx="2.4"
+          width="13.2"
+          x={labelAnchor === "end" ? labelX - 13.2 : labelX}
+          y={Math.max(4.6, stylePoint.y - 14)}
+        />
         <text
           className="hand-label"
           dominantBaseline="middle"
