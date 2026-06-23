@@ -7,8 +7,23 @@
 
 .video-shell {
   min-width: 0;
-  padding: 1.5rem;
+  min-height: 0;
+  padding: clamp(0.75rem, 1.4vw, 1.2rem);
   background: transparent;
+}
+
+.golden-shell:has(.assessment-page) {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (min-width: 1041px) {
+  .golden-shell:has(.calibration-layout) {
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
 }
 
 .video-frame,
@@ -40,14 +55,73 @@
   backdrop-filter: blur(16px);
 }
 
+.calibration-layout {
+  height: calc(100dvh - 93px);
+  min-height: 0 !important;
+  overflow: hidden;
+}
+
+.calibration-layout .video-shell {
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+}
+
+.calibration-layout .video-frame {
+  align-self: center;
+  max-height: calc(100dvh - 93px - clamp(1.5rem, 2.8vw, 2.4rem));
+}
+
+.calibration-layout .control-panel {
+  min-height: 0;
+  overflow: hidden;
+  justify-content: center;
+  gap: clamp(0.7rem, 1.25vh, 1.15rem) !important;
+  padding: clamp(1rem, 1.9vw, 1.55rem) !important;
+}
+
+.calibration-layout .lux-title {
+  font-size: clamp(1.55rem, 2.35vw, 2.4rem);
+  line-height: 1.14;
+}
+
+.calibration-layout .status-pill {
+  min-height: 2.65rem;
+  padding-block: 0.62rem;
+}
+
+.calibration-layout .readiness-grid {
+  gap: 0.5rem;
+}
+
+.calibration-layout .readiness-pill {
+  min-height: 2.72rem;
+}
+
+.calibration-layout .metric-bar {
+  gap: 0.42rem;
+}
+
+.calibration-layout .ui-column {
+  gap: 0.58rem;
+}
+
+.calibration-layout .lux-button {
+  min-height: 2.8rem;
+  padding-block: 0.66rem;
+}
+
 .assessment-page {
-  min-height: calc(100vh - 89px);
-  padding: 1.125rem;
+  height: calc(100dvh - 93px);
+  min-height: 0;
+  overflow: hidden;
+  padding: clamp(0.62rem, 1.25vw, 1rem);
 }
 
 .assessment-theater {
   display: grid;
-  min-height: calc(100vh - 125px);
+  height: 100%;
+  min-height: 0;
   place-items: center;
   border-radius: var(--radius-lg);
   box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.65);
@@ -55,7 +129,8 @@
 
 .assessment-feed {
   aspect-ratio: 16 / 9;
-  width: min(100%, 1180px);
+  width: min(100%, 1180px, calc((100dvh - 93px - clamp(1.24rem, 2.5vw, 2rem)) * 16 / 9));
+  max-height: 100%;
   cursor: zoom-in;
 }
 
@@ -349,23 +424,40 @@
   .dashboard-layout {
     grid-template-columns: 1fr !important;
   }
+
+  .calibration-layout {
+    height: auto;
+    min-height: calc(100dvh - 93px) !important;
+    overflow: visible;
+  }
+
+  .calibration-layout .control-panel {
+    overflow: visible;
+  }
 }
 
 @media (max-width: 700px) {
+  .calibration-layout {
+    min-height: calc(100dvh - 168px) !important;
+  }
+
   .assessment-page {
-    min-height: calc(100vh - 168px);
+    height: calc(100dvh - 168px);
+    min-height: 0;
     padding: 0;
   }
 
   .assessment-theater {
-    min-height: calc(100vh - 168px);
+    height: 100%;
+    min-height: 0;
     border-radius: 0;
   }
 
   .assessment-feed {
-    min-height: 560px;
+    min-height: 0;
     width: 100%;
-    height: calc(100vh - 168px);
+    height: 100%;
+    max-height: none;
     border-radius: 0;
   }
 

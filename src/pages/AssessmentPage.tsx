@@ -117,7 +117,7 @@ export function AssessmentPage({
     <>
       {stage === "calibration" ? (
         <PageWrapper key="calibration">
-          <section className="calibration-layout grid min-h-[calc(100vh-89px)] grid-cols-[minmax(520px,1fr)_minmax(330px,420px)] max-[1040px]:grid-cols-1">
+          <section className="calibration-layout grid grid-cols-[minmax(520px,1fr)_minmax(330px,420px)] max-[1040px]:grid-cols-1">
             <div className="video-shell max-[700px]:p-[18px]">
               <div className="video-frame aspect-video w-full">
                 <video
