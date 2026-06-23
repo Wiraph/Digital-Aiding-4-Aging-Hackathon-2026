@@ -139,8 +139,11 @@ export function AssessmentPage({
               </div>
             </div>
             <aside className="control-panel flex flex-col gap-6 p-8 max-[700px]:p-[18px]">
-              <p className={ui.eyebrow}>ปรับเทียบกล้อง</p>
-              <h2 className={ui.title}>นั่งตรงกลางภาพ แล้วยกมือทั้งสองข้าง</h2>
+              <p className={ui.eyebrow}>ปรับเทียบกล้อง · Camera Calibration</p>
+              <h2 className={ui.title}>
+                นั่งตรงกลางภาพ แล้วยกมือทั้งสองข้าง
+                <span className="en-sub">Sit centred in frame, then raise both hands</span>
+              </h2>
               <div
                 className={`status-pill ${
                   camera.status === "ready"
@@ -175,6 +178,9 @@ export function AssessmentPage({
                   </span>
                 ))}
               </div>
+              <p style={{ margin: "0.25rem 0 0", fontSize: "0.78rem", color: "var(--clinical-muted)" }}>
+                สีเขียว = กล้องตรวจพบแล้ว · Green dot = detected by camera
+              </p>
               {camera.error ? (
                 <p className="m-0 rounded-lg bg-[#3b1d1d] p-[13px] font-bold text-[#ffd6c7]">
                   {camera.error}
@@ -336,8 +342,11 @@ export function AssessmentPage({
             <div className={ui.sectionTitle}>
               <CheckCircle2 size={30} />
               <div>
-                <p className={ui.eyebrow}>ผลลัพธ์ผู้รับการทดสอบ</p>
-                <h2 className={ui.title}>ทดสอบเสร็จสมบูรณ์</h2>
+                <p className={ui.eyebrow}>ผลลัพธ์ผู้รับการทดสอบ · Assessment Results</p>
+                <h2 className={ui.title}>
+                  ทดสอบเสร็จสมบูรณ์
+                  <span className="en-sub">Assessment complete</span>
+                </h2>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-3.5 max-[1040px]:grid-cols-2 max-[700px]:grid-cols-1">

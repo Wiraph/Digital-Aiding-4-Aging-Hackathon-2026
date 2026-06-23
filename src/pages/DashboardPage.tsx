@@ -1,4 +1,4 @@
-import { type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties, type ReactNode, useState } from "react";
 import {
   Activity,
   ArrowDownRight,
@@ -84,20 +84,37 @@ function progressSeries(sessions: AssessmentSession[], activeSession: Assessment
   });
 }
 
-function smoothPath(points: Array<{ x: number; y: number }>) {
-  if (points.length === 0) return "";
-  if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
+// Fritsch-Carlson monotone cubic interpolation.
+// The line passes through every data point and never overshoots between them —
+// critical for clinical charts where implied values must reflect real readings.
+function monotonePath(points: Array<{ x: number; y: number }>): string {
+  const n = points.length;
+  if (n === 0) return "";
+  if (n === 1) return `M ${points[0].x} ${points[0].y}`;
+  if (n === 2) return `M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`;
 
-  return points
-    .slice(1)
-    .reduce(
-      (path, point, index) => {
-        const previous = points[index];
-        const controlX = (previous.x + point.x) / 2;
-        return `${path} C ${controlX} ${previous.y}, ${controlX} ${point.y}, ${point.x} ${point.y}`;
-      },
-      `M ${points[0].x} ${points[0].y}`,
-    );
+  const dx = Array.from({ length: n - 1 }, (_, i) => points[i + 1].x - points[i].x);
+  const dy = Array.from({ length: n - 1 }, (_, i) => points[i + 1].y - points[i].y);
+  const slopes = dx.map((d, i) => (d === 0 ? 0 : dy[i] / d));
+
+  const tangents = Array.from({ length: n }, (_, i): number => {
+    if (i === 0) return slopes[0];
+    if (i === n - 1) return slopes[n - 2];
+    if (slopes[i - 1] * slopes[i] <= 0) return 0;
+    const h0 = dx[i - 1];
+    const h1 = dx[i];
+    return (3 * (h0 + h1)) / ((2 * h1 + h0) / slopes[i - 1] + (h1 + 2 * h0) / slopes[i]);
+  });
+
+  return points.slice(1).reduce((path, pt, i) => {
+    const p0 = points[i];
+    const h = pt.x - p0.x;
+    const cp1x = (p0.x + h / 3).toFixed(1);
+    const cp1y = (p0.y + (tangents[i] * h) / 3).toFixed(1);
+    const cp2x = (pt.x - h / 3).toFixed(1);
+    const cp2y = (pt.y - (tangents[i + 1] * h) / 3).toFixed(1);
+    return `${path} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${pt.x} ${pt.y}`;
+  }, `M ${points[0].x} ${points[0].y}`);
 }
 
 function MicroMetricCard({
@@ -232,7 +249,7 @@ function ProgressChartBento({
     x: padding.left + (index / Math.max(1, series.length - 1)) * plotWidth,
     y: padding.top + ((100 - clampPercent(item.value)) / 100) * chartHeight,
   }));
-  const linePath = smoothPath(points);
+  const linePath = monotonePath(points);
   const areaPath =
     points.length > 0
       ? `${linePath} L ${points[points.length - 1].x} ${height - padding.bottom} L ${points[0].x} ${height - padding.bottom} Z`
@@ -250,12 +267,12 @@ function ProgressChartBento({
       <svg className="progress-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Patient progress line chart">
         <defs>
           <linearGradient id="progressArea" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="oklch(0.64 0.14 248 / 0.3)" />
-            <stop offset="100%" stopColor="oklch(0.98 0.006 235 / 0)" />
+            <stop offset="0%" stopColor="oklch(0.58 0.14 60 / 0.28)" />
+            <stop offset="100%" stopColor="oklch(0.98 0.006 78 / 0)" />
           </linearGradient>
           <linearGradient id="progressStroke" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stopColor="oklch(0.5 0.13 248)" />
-            <stop offset="100%" stopColor="oklch(0.68 0.15 238)" />
+            <stop offset="0%" stopColor="oklch(0.44 0.17 52)" />
+            <stop offset="100%" stopColor="oklch(0.72 0.14 72)" />
           </linearGradient>
         </defs>
         <line className="chart-axis-line" x1={padding.left} x2={padding.left} y1={padding.top} y2={height - padding.bottom} />
@@ -323,13 +340,26 @@ function DivergingPerformanceBento({ session }: { session: AssessmentSession }) 
   );
 }
 
+type HeatmapArm = "left" | "both" | "right";
+
 function MovementHeatmapBento({ session }: { session: AssessmentSession }) {
+  const [arm, setArm] = useState<HeatmapArm>("both");
+
   const values = ZONES.map((zone) => {
     const left = session.metrics.heatmap.left[zone.id] ?? 0;
     const right = session.metrics.heatmap.right[zone.id] ?? 0;
+    if (arm === "left") return left;
+    if (arm === "right") return right;
     return left + right;
   });
   const max = Math.max(1, ...values);
+  const total = values.reduce((sum, v) => sum + v, 0);
+
+  const armOptions: { key: HeatmapArm; labelTh: string; labelEn: string }[] = [
+    { key: "left", labelTh: "ซ้าย", labelEn: "L" },
+    { key: "both", labelTh: "ทั้งคู่", labelEn: "Both" },
+    { key: "right", labelTh: "ขวา", labelEn: "R" },
+  ];
 
   return (
     <AnimatedBentoCard className="square-bento movement-heatmap-bento">
@@ -338,17 +368,39 @@ function MovementHeatmapBento({ session }: { session: AssessmentSession }) {
           <span>Movement Distribution</span>
           <h3>Reach Density Heatmap</h3>
         </div>
+        <div className="heatmap-arm-toggle" role="group" aria-label="แสดงข้อมูลแขน">
+          {armOptions.map((option) => (
+            <button
+              aria-pressed={arm === option.key}
+              className={`heatmap-arm-btn${arm === option.key ? " is-active" : ""}`}
+              key={option.key}
+              onClick={() => setArm(option.key)}
+              type="button"
+            >
+              <span className="heatmap-arm-btn__th">{option.labelTh}</span>
+              <span className="heatmap-arm-btn__en">{option.labelEn}</span>
+            </button>
+          ))}
+        </div>
       </div>
       <div className="movement-heatmap-grid">
         {ZONES.map((zone, index) => {
-          const intensity = values[index] / max;
+          const count = values[index];
+          const intensity = count / max;
+          const pct = total > 0 ? Math.round((count / total) * 100) : 0;
           return (
             <span
-              aria-label={`Zone ${zone.id} movement density ${Math.round(intensity * 100)} percent`}
+              aria-label={`Zone ${zone.id}: ${count} ครั้ง, ${pct}%`}
               className="movement-heatmap-cell"
               key={zone.id}
               style={{ "--heat": intensity } as CSSProperties}
-            />
+            >
+              <span className="heatmap-cell-tip" aria-hidden="true">
+                <span className="heatmap-cell-tip__count">{count}</span>
+                <span className="heatmap-cell-tip__label">ครั้ง</span>
+                <span className="heatmap-cell-tip__pct">{pct}%</span>
+              </span>
+            </span>
           );
         })}
       </div>
@@ -434,17 +486,17 @@ export function DashboardPage({
               <span className="dashboard-meta">
                 ID {normalizePatientId(activeSession.patientId)} ·{" "}
                 Age {activeSession.patientProfile.age} · {sexLabelTh(activeSession.patientProfile.sex)} ·{" "}
-                {sourceLabelTh(activeSession.source)} · {patientSessions.length} ครั้งในรหัสนี้
+                {sourceLabelTh(activeSession.source)} · {patientSessions.length} sessions
               </span>
             </div>
             <div className="dashboard-actions">
               <button className={ui.secondaryButton} onClick={() => exportSessionJson(activeSession)} type="button">
                 <Download size={19} />
-                ส่งออก JSON
+                Export JSON
               </button>
-              <button className={ui.dangerButton} onClick={() => onRemoveSession(activeSession.id)} type="button">
+              <button className="lux-button lux-button--ghost-danger" onClick={() => onRemoveSession(activeSession.id)} type="button">
                 <Trash2 size={19} />
-                ลบ
+                Delete
               </button>
             </div>
           </div>
@@ -458,9 +510,9 @@ export function DashboardPage({
               value={Math.round(activeSession.metrics.overallScore)}
             />
             <MicroMetricCard
-              detail={`${Math.round(activeSession.metrics.asymmetry)} point separation`}
+              detail={`${Math.round(activeSession.metrics.asymmetry)}pt arm asymmetry · ${riskLabelTh(activeSession.metrics.riskLabel)}`}
               icon={<Brain size={21} />}
-              label="LNU Index"
+              label="Learned Non-Use (LNU)"
               tone="risk"
               value={Math.round(activeSession.metrics.learnedNonUseRiskIndex)}
             />

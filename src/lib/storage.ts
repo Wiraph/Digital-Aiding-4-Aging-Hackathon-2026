@@ -21,12 +21,12 @@ function normalizePatientId(value: string) {
 }
 
 export const defaultProfile: PatientProfile = {
-  id: "P-0001",
-  name: "ผู้ทดสอบตัวอย่าง",
-  age: 67,
-  sex: "female",
-  chronicDiseases: "ความดันโลหิตสูง; ติดตามหลังโรคหลอดเลือดสมอง",
-  preferredArm: "right",
+  id: "",
+  name: "",
+  age: 0,
+  sex: "prefer-not",
+  chronicDiseases: "",
+  preferredArm: "unknown",
 };
 
 export function loadProfile(): PatientProfile {

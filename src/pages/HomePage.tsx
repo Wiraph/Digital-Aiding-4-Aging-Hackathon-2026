@@ -1,15 +1,13 @@
-import { CheckCircle2, ClipboardList, Play } from "lucide-react";
+import { CheckCircle2, ClipboardList } from "lucide-react";
 import { PageWrapper } from "../components/PageWrapper";
 import { ui } from "../app/ui";
 import type { PatientProfile } from "../types";
 
 export function HomePage({
-  onStartDemo,
   onSubmitProfile,
   profile,
   updateProfile,
 }: {
-  onStartDemo: () => void;
   onSubmitProfile: () => void;
   profile: PatientProfile;
   updateProfile: (next: Partial<PatientProfile>) => void;
@@ -21,27 +19,30 @@ export function HomePage({
           <div className={ui.sectionTitle}>
             <ClipboardList size={28} />
             <div>
-              <p className={ui.eyebrow}>ข้อมูลผู้รับการทดสอบ</p>
-              <h2 className={ui.title}>ข้อมูลพื้นฐานก่อนเริ่มประเมิน</h2>
+              <p className={ui.eyebrow}>ข้อมูลผู้รับการทดสอบ · Patient Profile</p>
+              <h2 className={ui.title}>
+                ข้อมูลพื้นฐานก่อนเริ่มประเมิน
+                <span className="en-sub">Basic information before assessment</span>
+              </h2>
             </div>
           </div>
           <div className="premium-form mb-6 grid grid-cols-2 gap-[18px] max-[700px]:grid-cols-1">
             <label>
-              ชื่อผู้ทดสอบ
+              ชื่อผู้ทดสอบ <span className="en-sub" style={{display:"inline", fontSize:"0.82em"}}>Name</span>
               <input
                 onChange={(event) => updateProfile({ name: event.target.value })}
                 value={profile.name}
               />
             </label>
             <label>
-              รหัสผู้รับการทดสอบ
+              รหัสผู้รับการทดสอบ <span className="en-sub" style={{display:"inline", fontSize:"0.82em"}}>Patient ID</span>
               <input
                 onChange={(event) => updateProfile({ id: event.target.value })}
                 value={profile.id}
               />
             </label>
             <label>
-              อายุ
+              อายุ <span className="en-sub" style={{display:"inline", fontSize:"0.82em"}}>Age</span>
               <input
                 max={110}
                 min={45}
@@ -51,21 +52,21 @@ export function HomePage({
               />
             </label>
             <label>
-              เพศ
+              เพศ <span className="en-sub" style={{display:"inline", fontSize:"0.82em"}}>Sex</span>
               <select
                 onChange={(event) =>
                   updateProfile({ sex: event.target.value as PatientProfile["sex"] })
                 }
                 value={profile.sex}
               >
-                <option value="female">หญิง</option>
-                <option value="male">ชาย</option>
-                <option value="other">อื่น ๆ</option>
-                <option value="prefer-not">ไม่ต้องการระบุ</option>
+                <option value="female">หญิง · Female</option>
+                <option value="male">ชาย · Male</option>
+                <option value="other">อื่น ๆ · Other</option>
+                <option value="prefer-not">ไม่ต้องการระบุ · Prefer not to say</option>
               </select>
             </label>
             <label>
-              แขนที่ถนัด
+              แขนที่ถนัด <span className="en-sub" style={{display:"inline", fontSize:"0.82em"}}>Dominant arm</span>
               <select
                 onChange={(event) =>
                   updateProfile({
@@ -74,9 +75,9 @@ export function HomePage({
                 }
                 value={profile.preferredArm}
               >
-                <option value="right">ขวา</option>
-                <option value="left">ซ้าย</option>
-                <option value="unknown">ไม่แน่ใจ</option>
+                <option value="right">ขวา · Right</option>
+                <option value="left">ซ้าย · Left</option>
+                <option value="unknown">ไม่แน่ใจ · Unsure</option>
               </select>
             </label>
           </div>
@@ -84,10 +85,6 @@ export function HomePage({
             <button className={ui.primaryButton} onClick={onSubmitProfile} type="button">
               <CheckCircle2 size={21} />
               บันทึกและปรับเทียบกล้อง
-            </button>
-            <button className={ui.secondaryButton} onClick={onStartDemo} type="button">
-              <Play size={19} />
-              โหมดสาธิต
             </button>
           </div>
         </div>

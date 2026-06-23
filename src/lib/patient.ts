@@ -42,7 +42,7 @@ export function normalizePatientId(value: string) {
 export function normalizePatientProfile(profile: PatientProfile) {
   return {
     ...profile,
-    id: profile.id.trim() || "P-0001",
+    id: profile.id.trim(),
     name: profile.name.trim(),
   };
 }

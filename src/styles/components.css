@@ -1,3 +1,4 @@
+/* ── Layout utilities ─────────────────────────────────────── */
 .ui-row {
   display: flex;
   flex-wrap: wrap;
@@ -10,6 +11,7 @@
   gap: 0.75rem;
 }
 
+/* ── Section title (icon + heading block) ─────────────────── */
 .section-title {
   display: flex;
   align-items: flex-start;
@@ -19,13 +21,14 @@
 
 .section-title > svg {
   flex: 0 0 auto;
-  margin-top: 0.25rem;
+  margin-top: 0.28rem;
   border-radius: var(--radius-md);
-  padding: 0.35rem;
+  padding: 0.38rem;
   color: var(--clinical-blue);
-  background: oklch(0.93 0.035 242);
+  background: var(--clinical-blue-soft);
 }
 
+/* ── Buttons ──────────────────────────────────────────────── */
 .lux-button,
 .exam-button {
   position: relative;
@@ -37,8 +40,9 @@
   overflow: hidden;
   border: 0;
   border-radius: 999px;
-  padding: 0.78rem 1.2rem;
-  font-weight: 850;
+  padding: 0.78rem 1.25rem;
+  font-size: 0.94rem;
+  font-weight: 800;
   line-height: 1;
   box-shadow: 0 4px 8px var(--clinical-shadow);
 }
@@ -49,30 +53,42 @@
   z-index: 1;
 }
 
+/* Primary: deep amber gradient, white text */
 .lux-button--primary,
 .exam-button--primary {
   color: white;
-  background: linear-gradient(135deg, var(--clinical-blue), oklch(0.42 0.13 252));
+  background: linear-gradient(135deg, var(--clinical-blue), oklch(0.34 0.14 50));
 }
 
+/* Secondary: warm white, ink text */
 .lux-button--secondary,
 .exam-button,
 .exam-button--muted {
   color: var(--clinical-ink);
-  background: linear-gradient(145deg, oklch(1 0 0), oklch(0.92 0.018 242));
+  background: linear-gradient(145deg, oklch(1 0 0), oklch(0.92 0.014 78));
 }
 
+/* Danger: deep warm red — for in-flow controls (stop assessment, etc.) */
 .lux-button--danger,
 .exam-button--danger {
   color: white;
-  background: linear-gradient(135deg, var(--clinical-danger), oklch(0.45 0.17 28));
+  background: linear-gradient(135deg, var(--clinical-danger), oklch(0.42 0.17 26));
 }
 
+/* Ghost danger — for destructive actions that should not shout (delete, remove) */
+.lux-button--ghost-danger {
+  color: var(--clinical-danger);
+  background: linear-gradient(145deg, oklch(1 0 0), oklch(0.97 0.010 78));
+  border: 1px solid oklch(0.84 0.04 28);
+}
+
+/* Active/success: green */
 .exam-button--active {
   color: oklch(0.2 0.08 154);
   background: linear-gradient(135deg, oklch(0.94 0.05 154), oklch(0.84 0.09 154));
 }
 
+/* ── Cards ────────────────────────────────────────────────── */
 .marble-card,
 .score-tile {
   position: relative;
@@ -80,9 +96,24 @@
   border: 1px solid var(--surface-border);
   border-radius: var(--radius-lg);
   color: var(--clinical-ink);
-  background: linear-gradient(145deg, oklch(1 0 0 / 0.82), var(--clinical-panel-soft));
-  box-shadow: 0 6px 8px var(--clinical-shadow);
+  background: linear-gradient(145deg, oklch(1 0 0 / 0.84), var(--clinical-panel-soft));
+  box-shadow: 0 6px 12px var(--clinical-shadow);
   backdrop-filter: blur(14px);
+}
+
+/* Subtle warm gloss layer */
+.marble-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, oklch(1 0 0 / 0.55), transparent 40%);
+  border-radius: inherit;
+}
+
+.marble-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .marble-card .lux-title,
@@ -98,12 +129,13 @@
   animation: card-unveil 520ms var(--control-ease) both;
 }
 
+/* ── Form ─────────────────────────────────────────────────── */
 .premium-form label {
   display: grid;
-  gap: 0.55rem;
+  gap: 0.5rem;
   color: var(--clinical-muted);
-  font-size: 0.92rem;
-  font-weight: 850;
+  font-size: 0.88rem;
+  font-weight: 700;
   animation: field-cascade 420ms var(--control-ease) both;
 }
 
@@ -117,7 +149,7 @@
   width: 100%;
   min-height: 3.15rem;
   border: 0;
-  border-bottom: 1px solid oklch(0.74 0.03 244);
+  border-bottom: 1.5px solid oklch(0.82 0.018 78);
   border-radius: 0;
   padding: 0.75rem 0.1rem 0.8rem;
   color: var(--clinical-ink);
@@ -133,9 +165,10 @@
 .premium-form input:focus,
 .premium-form select:focus {
   border-color: var(--clinical-blue);
-  box-shadow: 0 8px 0 -7px oklch(0.55 0.13 248 / 0.72);
+  box-shadow: 0 8px 0 -7px oklch(0.44 0.17 52 / 0.65);
 }
 
+/* ── Metric bar ───────────────────────────────────────────── */
 .metric-bar {
   display: grid;
   gap: 0.55rem;
@@ -157,13 +190,13 @@
   overflow: hidden;
   border: 0;
   border-radius: 999px;
-  background: oklch(0.9 0.018 242);
+  background: oklch(0.9 0.012 78);
 }
 
 .metric-bar progress::-webkit-progress-bar,
 .golden-shell progress::-webkit-progress-bar {
   border-radius: 999px;
-  background: oklch(0.9 0.018 242);
+  background: oklch(0.9 0.012 78);
 }
 
 .metric-bar progress::-webkit-progress-value,
@@ -174,6 +207,7 @@
   background: linear-gradient(90deg, var(--clinical-blue), var(--clinical-gold));
 }
 
+/* ── Status pills ─────────────────────────────────────────── */
 .status-pill,
 .test-pill,
 .target-label,
@@ -181,7 +215,7 @@
 .camera-placeholder,
 .icon-button {
   color: var(--clinical-ink);
-  background: oklch(1 0 0 / 0.84);
+  background: oklch(1 0 0 / 0.86);
   box-shadow: 0 4px 8px var(--clinical-shadow);
   backdrop-filter: blur(14px);
 }
@@ -192,7 +226,7 @@
   gap: 0.65rem;
   border-radius: 999px;
   padding: 0.9rem 1rem;
-  font-weight: 850;
+  font-weight: 800;
 }
 
 .status-pill--ready {
@@ -203,6 +237,7 @@
   color: oklch(0.45 0.17 28);
 }
 
+/* ── Readiness grid ───────────────────────────────────────── */
 .readiness-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -217,8 +252,8 @@
   gap: 0.5rem;
   border-radius: 999px;
   color: var(--clinical-muted);
-  background: oklch(0.945 0.014 242);
-  font-weight: 850;
+  background: oklch(0.945 0.010 78);
+  font-weight: 800;
   box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.58);
 }
 
@@ -227,7 +262,7 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 999px;
-  background: oklch(0.68 0.025 244);
+  background: oklch(0.72 0.020 78);
 }
 
 .readiness-pill--ready {
@@ -240,6 +275,7 @@
   box-shadow: 0 0 8px oklch(0.68 0.16 154 / 0.46);
 }
 
+/* ── Score tiles ──────────────────────────────────────────── */
 .score-tile {
   display: grid;
   min-height: 10rem;
@@ -251,7 +287,7 @@
 .score-tile span,
 .score-tile small {
   color: var(--clinical-muted);
-  font-weight: 850;
+  font-weight: 800;
   line-height: 1.45;
 }
 
@@ -278,9 +314,10 @@
 
 .score-tile--left,
 .score-tile--right {
-  box-shadow: 0 6px 8px var(--clinical-shadow);
+  box-shadow: 0 6px 12px var(--clinical-shadow);
 }
 
+/* ── Report card ──────────────────────────────────────────── */
 .report-card {
   margin: 1.25rem auto;
   min-height: auto;
@@ -295,21 +332,22 @@
   border-radius: var(--radius-lg);
   padding: 1.1rem;
   color: var(--clinical-ink);
-  background: oklch(0.955 0.012 242 / 0.72);
+  background: oklch(0.955 0.010 78 / 0.72);
 }
 
 .report-copy p {
   margin: 0;
-  line-height: 1.55;
+  line-height: 1.6;
   animation: field-cascade 420ms var(--control-ease) both;
 }
 
 .report-copy p:nth-child(2) { animation-delay: 70ms; }
 .report-copy p:nth-child(3) { animation-delay: 140ms; }
 
+/* ── Camera consent overrides ─────────────────────────────── */
 [aria-labelledby="camera-consent-title"] > div:first-child {
   color: var(--clinical-blue) !important;
-  background: oklch(0.93 0.035 242) !important;
+  background: var(--clinical-blue-soft) !important;
 }
 
 [aria-labelledby="camera-consent-title"] p {
@@ -318,9 +356,10 @@
 
 [aria-labelledby="camera-consent-title"] .rounded-2xl {
   color: var(--clinical-ink) !important;
-  background: oklch(0.945 0.014 242) !important;
+  background: oklch(0.945 0.010 78) !important;
 }
 
+/* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 700px) {
   .lux-button,
   .exam-button {

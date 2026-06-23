@@ -23,8 +23,8 @@ import {
   sideLabel,
 } from "./lib/assessment";
 import {
+  defaultProfile,
   deleteSession,
-  loadProfile,
   loadSessions,
   saveProfile,
   saveSession,
@@ -37,6 +37,7 @@ import {
 import { mirrorPoseForDisplay } from "./lib/pose";
 import { DashboardPage } from "./pages/DashboardPage";
 import { HomePage } from "./pages/HomePage";
+import { LoginPage } from "./pages/LoginPage";
 import { AssessmentPage } from "./pages/AssessmentPage";
 import type {
   AssessmentSession,
@@ -87,9 +88,9 @@ export default function App() {
   const assessmentStageRef = useRef<HTMLDivElement | null>(null);
   const camera = useCameraPose(videoRef, canvasRef);
 
-  const [stage, setStage] = useState<PatientStage>("profile");
+  const [stage, setStage] = useState<PatientStage>("login");
   const [consent, setConsent] = useState<ConsentState>(defaultConsent);
-  const [profile, setProfile] = useState<PatientProfile>(() => loadProfile());
+  const [profile, setProfile] = useState<PatientProfile>(defaultProfile);
   const currentProfile = normalizePatientProfile(profile);
   const currentPatientId = normalizePatientId(currentProfile.id);
   const [sessions, setSessions] = useState<AssessmentSession[]>(initialSessions);
@@ -495,8 +496,24 @@ export default function App() {
     setActiveSessionId(nextCurrentSession?.id ?? "");
   }
 
+  function handleLogin(patientId: string) {
+    const matchingSessions = sessions
+      .filter((s) => s.patientId.trim().toLowerCase() === patientId.toLowerCase())
+      .sort((a, b) => sessionTime(b) - sessionTime(a));
+    const lastSession = matchingSessions[0];
+    if (lastSession) {
+      setProfile({ ...lastSession.patientProfile, id: patientId });
+      setActiveSessionId(lastSession.id);
+      setMenuVisible(true);
+      navigate("/dashboard");
+    } else {
+      setProfile({ ...defaultProfile, id: patientId });
+      setStage("profile");
+    }
+  }
+
   function resetPatientFlow() {
-    setStage("profile");
+    setStage("calibration");
     setTrialResults([]);
     resultsRef.current = [];
     setCurrentIndex(0);
@@ -521,9 +538,9 @@ export default function App() {
             <HeartPulse size={24} strokeWidth={2.4} />
           </span>
           <div>
-            <p className={ui.eyebrow}>Digital Aiding 4 Aging Hackathon 2026</p>
             <h1 className="brand-title">
-              โค้ชฟื้นฟูการเอื้อมแขน
+              เอื้อมไหม
+              <span className="en-sub">UemMai · Arm Reach Assessment</span>
             </h1>
           </div>
         </div>
@@ -620,16 +637,19 @@ export default function App() {
               <PageWrapper>
                 <section className="min-h-[calc(100vh-89px)]">
                   <AnimatePresence initial={false} mode="wait">
+          {stage === "login" ? (
+            <LoginPage sessions={sessions} onLogin={handleLogin} />
+          ) : null}
+
           {stage === "profile" ? (
             <HomePage
-              onStartDemo={startDemoFromProfile}
               onSubmitProfile={submitProfile}
               profile={profile}
               updateProfile={updateProfile}
             />
           ) : null}
 
-          {stage !== "profile" ? (
+          {stage !== "login" && stage !== "profile" ? (
             <AssessmentPage
               activeSession={activeSession}
               activeZoneStyle={activeZoneStyle}

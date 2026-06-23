@@ -1,10 +1,11 @@
+/* ── Keyframes ────────────────────────────────────────────── */
+
 @keyframes card-unveil {
   from {
     opacity: 0;
-    transform: translateY(14px) scale(0.988);
-    filter: blur(8px);
+    transform: translateY(16px) scale(0.986);
+    filter: blur(6px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -17,7 +18,6 @@
     opacity: 0;
     transform: translateY(10px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -27,41 +27,56 @@
 @keyframes number-trace {
   from {
     opacity: 0;
-    transform: translateY(8px) scale(0.94);
+    transform: translateY(8px) scale(0.92);
   }
-
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
 }
 
-@keyframes number-pulse {
+/* Warm amber glow pulse — replaces the cold blue number-pulse */
+@keyframes amber-pulse {
   0%, 100% {
-    box-shadow: 0 4px 8px var(--clinical-shadow);
+    box-shadow:
+      0 4px 10px var(--clinical-shadow),
+      0 0 0 0 oklch(0.72 0.14 72 / 0);
   }
-
   50% {
-    box-shadow: 0 8px 18px oklch(0.5 0.13 248 / 0.22);
+    box-shadow:
+      0 6px 18px oklch(0.44 0.15 52 / 0.20),
+      0 0 0 6px oklch(0.72 0.14 72 / 0.10);
   }
+}
+
+/* Legacy alias so existing references still compile */
+@keyframes number-pulse {
+  0%, 100% { box-shadow: 0 4px 8px var(--clinical-shadow); }
+  50%       { box-shadow: 0 8px 18px oklch(0.44 0.17 52 / 0.22); }
 }
 
 @keyframes trace-line {
-  to {
-    stroke-dashoffset: 0;
-  }
+  to { stroke-dashoffset: 0; }
 }
 
 @keyframes soft-pulse {
-  0%, 100% {
-    opacity: 0.78;
-  }
-
-  50% {
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.78; }
+  50%       { opacity: 1; }
 }
 
+/* Warm shimmer sweep — entry highlight for featured cards */
+@keyframes shimmer-warm {
+  from { transform: translateX(-100%) skewX(-12deg); }
+  to   { transform: translateX(220%) skewX(-12deg); }
+}
+
+/* Gentle float for the brand mark */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-2px); }
+}
+
+/* ── Transition surfaces ──────────────────────────────────── */
 .golden-nav-button,
 .lux-button,
 .exam-button,
@@ -87,13 +102,14 @@
     filter 240ms var(--control-ease);
 }
 
+/* ── Nav button hover ─────────────────────────────────────── */
 .golden-nav-button:hover,
 .golden-nav-button:focus-visible {
   color: var(--clinical-blue);
   background: oklch(1 0 0 / 0.68);
   box-shadow:
     inset 0 1px 0 oklch(1 0 0 / 0.86),
-    0 7px 14px oklch(0.42 0.08 248 / 0.14);
+    0 7px 14px oklch(0.35 0.06 65 / 0.14);
   transform: translate3d(0, -1px, 0) scale(1.006);
 }
 
@@ -103,64 +119,80 @@
   filter: brightness(1.02) saturate(1.04);
 }
 
+/* ── General button hover ─────────────────────────────────── */
 .lux-button:hover,
 .lux-button:focus-visible,
 .exam-button:hover,
 .exam-button:focus-visible {
   box-shadow:
     inset 0 1px 0 oklch(1 0 0 / 0.5),
-    0 10px 18px oklch(0.34 0.08 248 / 0.18);
+    0 10px 20px oklch(0.35 0.06 65 / 0.18);
   filter: brightness(1.025) saturate(1.04);
-  transform: translate3d(0, -1px, 0) scale(1.012);
+  transform: translate3d(0, -1.5px, 0) scale(1.012);
 }
 
+/* Primary button: warm amber glow on hover */
 .lux-button--primary:hover,
 .lux-button--primary:focus-visible,
 .exam-button--primary:hover,
 .exam-button--primary:focus-visible {
   box-shadow:
     inset 0 1px 0 oklch(1 0 0 / 0.28),
-    0 12px 22px oklch(0.5 0.15 248 / 0.28);
+    0 12px 24px oklch(0.44 0.17 52 / 0.30);
 }
 
+/* Ghost danger: subtle red tint on hover */
+.lux-button--ghost-danger:hover,
+.lux-button--ghost-danger:focus-visible {
+  background: oklch(0.97 0.018 28);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.60),
+    0 6px 16px oklch(0.52 0.18 28 / 0.14);
+}
+
+/* Danger button: red glow on hover */
 .lux-button--danger:hover,
 .lux-button--danger:focus-visible,
 .exam-button--danger:hover,
 .exam-button--danger:focus-visible {
   box-shadow:
     inset 0 1px 0 oklch(1 0 0 / 0.24),
-    0 12px 22px oklch(0.5 0.18 28 / 0.24);
+    0 12px 24px oklch(0.52 0.18 28 / 0.26);
 }
 
+/* Press */
 .lux-button:active,
 .exam-button:active,
 .golden-nav-button:active,
 .icon-button:active {
-  box-shadow: 0 4px 8px var(--clinical-shadow);
-  filter: brightness(0.98);
-  transform: translate3d(0, 0, 0) scale(0.98);
+  box-shadow: 0 2px 6px var(--clinical-shadow);
+  filter: brightness(0.97);
+  transform: translate3d(0, 0, 0) scale(0.978);
 }
 
+/* ── Icon button hover ────────────────────────────────────── */
 .icon-button:hover,
 .icon-button:focus-visible {
   color: var(--clinical-blue);
   background: oklch(1 0 0 / 0.94);
   box-shadow:
     inset 0 1px 0 oklch(1 0 0 / 0.68),
-    0 10px 18px oklch(0.34 0.08 248 / 0.16);
+    0 10px 18px oklch(0.35 0.06 65 / 0.14);
   transform: translate3d(0, -1px, 0) scale(1.01);
 }
 
+/* ── Timeline item hover ──────────────────────────────────── */
 .timeline-item:hover,
 .timeline-item:focus-visible {
-  border-color: oklch(0.64 0.11 248 / 0.38);
-  background: oklch(1 0 0 / 0.9);
+  border-color: oklch(0.72 0.10 68 / 0.40);
+  background: oklch(1 0 0 / 0.92);
   box-shadow:
     inset 0 1px 0 oklch(1 0 0 / 0.74),
-    0 9px 18px oklch(0.34 0.08 248 / 0.14);
+    0 9px 18px oklch(0.35 0.06 65 / 0.14);
   transform: translate3d(0, -1px, 0) scale(1.006);
 }
 
+/* ── Focus rings ──────────────────────────────────────────── */
 .lux-button:focus-visible,
 .exam-button:focus-visible,
 .icon-button:focus-visible,
@@ -171,6 +203,30 @@
   outline-offset: 3px;
 }
 
+/* ── Shimmer on featured card entry ──────────────────────── */
+.marble-card.unveil-card::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: -60%;
+  z-index: 2;
+  width: 40%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    oklch(1 0 0 / 0.22),
+    transparent
+  );
+  animation: shimmer-warm 900ms var(--control-ease) 200ms both;
+}
+
+/* ── Brand mark float ─────────────────────────────────────── */
+.brand-mark {
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+/* ── Reduced motion ───────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -192,5 +248,9 @@
   .timeline-item:hover,
   .timeline-item:focus-visible {
     transform: none;
+  }
+
+  .brand-mark {
+    animation: none;
   }
 }

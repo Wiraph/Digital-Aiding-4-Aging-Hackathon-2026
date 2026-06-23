@@ -1,5 +1,4 @@
 import type { LandmarkPoint, PoseSnapshot } from "../types";
-import { mirrorPoseForDisplay } from "../lib/pose";
 
 export function PoseSvg({
   pose,
@@ -56,7 +55,7 @@ export function PoseSvg({
     trackingQuality: 0.82,
   };
 
-  const active = mirrorPoseForDisplay(pose) ?? fallback;
+  const active = pose ?? fallback;
   const joints = [
     active.leftShoulder,
     active.rightShoulder,

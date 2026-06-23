@@ -1,3 +1,4 @@
+/* ── Dashboard bento layout ───────────────────────────────── */
 .bento-dashboard-layout {
   display: grid;
   min-height: calc(100vh - 89px);
@@ -6,8 +7,8 @@
   padding: var(--space-dashboard);
   color: var(--clinical-ink);
   background:
-    linear-gradient(180deg, oklch(0.992 0.004 238), var(--clinical-bg)),
-    linear-gradient(135deg, oklch(0.87 0.045 244 / 0.34), transparent 56%);
+    linear-gradient(180deg, oklch(0.992 0.006 78), var(--clinical-bg)),
+    linear-gradient(135deg, oklch(0.88 0.04 72 / 0.30), transparent 56%);
 }
 
 .bento-dashboard-layout *,
@@ -18,6 +19,7 @@
   letter-spacing: 0;
 }
 
+/* ── Sidebar ──────────────────────────────────────────────── */
 .dashboard-sidebar {
   position: sticky;
   top: 105px;
@@ -25,22 +27,21 @@
   align-self: start;
 }
 
-.progress-timeline {
-  overflow: hidden;
-  border: 1px solid oklch(0.88 0.018 244);
-  border-radius: var(--radius-lg);
-  padding: 1rem;
-  background: linear-gradient(180deg, oklch(1 0 0 / 0.84), oklch(0.955 0.012 242 / 0.82));
-  box-shadow: 0 6px 8px var(--clinical-shadow);
-  backdrop-filter: blur(16px);
-}
-
+/* ── Progress timeline ────────────────────────────────────── */
 .progress-timeline {
   display: grid;
   min-height: 0;
   grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid oklch(0.88 0.014 78);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  background: linear-gradient(180deg, oklch(1 0 0 / 0.86), oklch(0.955 0.010 78 / 0.82));
+  box-shadow: 0 6px 12px var(--clinical-shadow);
+  backdrop-filter: blur(16px);
 }
 
+/* ── Timeline kicker / heading ────────────────────────────── */
 .timeline-head {
   display: grid;
   gap: 0.25rem;
@@ -56,7 +57,7 @@
   color: var(--clinical-blue);
   font-size: 0.74rem;
   font-weight: 850;
-  letter-spacing: 0;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -77,6 +78,7 @@
   color: var(--clinical-muted);
 }
 
+/* ── Timeline list ────────────────────────────────────────── */
 .timeline-list {
   position: relative;
   display: grid;
@@ -88,16 +90,17 @@
 
 .timeline-empty {
   margin: 0;
-  border: 1px dashed oklch(0.78 0.035 244);
+  border: 1px dashed oklch(0.78 0.025 78);
   border-radius: var(--radius-md);
   padding: 0.9rem;
   color: var(--clinical-muted);
   font-size: 0.86rem;
-  font-weight: 780;
-  line-height: 1.45;
+  font-weight: 700;
+  line-height: 1.5;
   background: oklch(1 0 0 / 0.52);
 }
 
+/* Warm vertical connecting line */
 .timeline-list::before {
   content: "";
   position: absolute;
@@ -108,6 +111,7 @@
   background: linear-gradient(180deg, transparent, var(--clinical-silver-strong), transparent);
 }
 
+/* ── Timeline item ────────────────────────────────────────── */
 .timeline-item {
   position: relative;
   display: grid;
@@ -117,7 +121,7 @@
     "dot date score"
     "dot status score";
   gap: 0.36rem 0.72rem;
-  border: 1px solid oklch(0.89 0.016 244);
+  border: 1px solid oklch(0.89 0.014 78);
   border-radius: var(--radius-lg);
   padding: 0.86rem;
   color: var(--clinical-ink);
@@ -128,10 +132,11 @@
 }
 
 .timeline-item.is-active {
-  border-color: oklch(0.78 0.075 244);
-  background: linear-gradient(145deg, oklch(1 0 0 / 0.92), oklch(0.92 0.035 240 / 0.82));
+  border-color: oklch(0.78 0.09 68);
+  background: linear-gradient(145deg, oklch(1 0 0 / 0.92), oklch(0.92 0.030 72 / 0.82));
 }
 
+/* Warm amber dot */
 .timeline-dot {
   grid-area: dot;
   align-self: center;
@@ -139,7 +144,7 @@
   height: 0.62rem;
   border-radius: 999px;
   background: var(--clinical-blue);
-  box-shadow: 0 0 0 4px oklch(0.78 0.075 244 / 0.2);
+  box-shadow: 0 0 0 4px oklch(0.72 0.10 68 / 0.22);
 }
 
 .timeline-date {
@@ -149,6 +154,7 @@
   font-weight: 850;
 }
 
+/* Status badges */
 .timeline-status {
   grid-area: status;
   display: inline-flex;
@@ -160,7 +166,7 @@
   font-size: 0.74rem;
   font-weight: 850;
   line-height: 1;
-  background: oklch(0.93 0.035 242);
+  background: var(--clinical-blue-soft);
 }
 
 .timeline-status--stable {
@@ -178,6 +184,7 @@
   background: oklch(0.94 0.04 38);
 }
 
+/* Score badge */
 .timeline-score {
   grid-area: score;
   display: inline-flex;
@@ -188,7 +195,7 @@
   align-self: center;
   border-radius: 999px;
   padding: 0.36rem 0.48rem;
-  color: oklch(0.28 0.1 152);
+  color: oklch(0.28 0.10 152);
   font-size: 0.82rem;
   font-weight: 900;
   background: oklch(0.94 0.042 154);
@@ -199,6 +206,7 @@
   background: oklch(0.94 0.04 38);
 }
 
+/* ── Dashboard main column ────────────────────────────────── */
 .bento-dashboard-main {
   display: grid;
   min-width: 0;
@@ -207,16 +215,17 @@
   padding: 0;
 }
 
+/* Header strip */
 .bento-dashboard-main .dashboard-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-dashboard);
-  border: 1px solid oklch(0.89 0.016 244);
+  border: 1px solid oklch(0.89 0.014 78);
   border-radius: var(--radius-lg);
   padding: 18px 20px;
-  background: oklch(1 0 0 / 0.76);
-  box-shadow: 0 5px 8px var(--clinical-shadow);
+  background: oklch(1 0 0 / 0.78);
+  box-shadow: 0 5px 10px var(--clinical-shadow);
   backdrop-filter: blur(14px);
 }
 
@@ -229,17 +238,18 @@
   text-wrap: balance;
 }
 
+/* Empty state */
 .dashboard-empty {
   display: grid;
   min-height: min(30rem, calc(100vh - 145px));
   align-content: center;
   justify-items: start;
   gap: 1rem;
-  border: 1px solid oklch(0.89 0.016 244);
+  border: 1px solid oklch(0.89 0.014 78);
   border-radius: var(--radius-lg);
   padding: clamp(24px, 4vw, 44px);
-  background: oklch(1 0 0 / 0.76);
-  box-shadow: 0 5px 8px var(--clinical-shadow);
+  background: oklch(1 0 0 / 0.78);
+  box-shadow: 0 5px 10px var(--clinical-shadow);
   backdrop-filter: blur(14px);
 }
 
@@ -250,7 +260,7 @@
   place-items: center;
   border-radius: var(--radius-md);
   color: var(--clinical-blue);
-  background: oklch(0.93 0.036 242);
+  background: var(--clinical-blue-soft);
 }
 
 .dashboard-empty h2 {
@@ -261,6 +271,7 @@
   line-height: 1.18;
 }
 
+/* Action buttons row */
 .dashboard-actions {
   display: flex;
   flex-wrap: wrap;
@@ -275,6 +286,7 @@
   box-shadow: 0 3px 8px var(--clinical-shadow);
 }
 
+/* ── Bento grid ───────────────────────────────────────────── */
 .bento-grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -282,6 +294,7 @@
   gap: var(--space-dashboard);
 }
 
+/* ── Bento card base ──────────────────────────────────────── */
 .bento-card {
   position: relative;
   min-width: 0;
@@ -289,17 +302,18 @@
   border: 1px solid var(--surface-border);
   border-radius: var(--radius-lg);
   color: var(--clinical-ink);
-  background: linear-gradient(145deg, var(--clinical-glass), oklch(0.96 0.012 242 / 0.72));
-  box-shadow: 0 6px 8px var(--clinical-shadow);
+  background: linear-gradient(145deg, var(--clinical-glass), oklch(0.96 0.008 78 / 0.72));
+  box-shadow: 0 6px 12px var(--clinical-shadow);
   backdrop-filter: blur(16px);
 }
 
+/* Warm gloss overlay */
 .bento-card::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(135deg, oklch(1 0 0 / 0.72), transparent 42%);
+  background: linear-gradient(135deg, oklch(1 0 0 / 0.70), transparent 42%);
 }
 
 .bento-card > * {
@@ -307,6 +321,7 @@
   z-index: 1;
 }
 
+/* ── Micro metric cards (score / risk / completion) ────────── */
 .micro-card {
   display: grid;
   width: 100%;
@@ -323,7 +338,7 @@
   place-items: center;
   border-radius: var(--radius-md);
   color: var(--clinical-blue);
-  background: oklch(0.93 0.036 242);
+  background: var(--clinical-blue-soft);
 }
 
 .micro-card strong {
@@ -335,25 +350,29 @@
 
 .micro-card small {
   font-size: 0.82rem;
-  font-weight: 780;
+  font-weight: 700;
   line-height: 1.25;
 }
 
+/* Amber score icon */
 .micro-card--score .micro-card__icon {
-  color: oklch(0.44 0.14 248);
-  background: oklch(0.91 0.045 244);
+  color: var(--clinical-blue);
+  background: var(--clinical-blue-soft);
 }
 
+/* Gold risk icon */
 .micro-card--risk .micro-card__icon {
-  color: oklch(0.48 0.1 82);
-  background: oklch(0.94 0.045 86);
+  color: oklch(0.44 0.14 68);
+  background: oklch(0.91 0.06 74);
 }
 
+/* Green completion icon */
 .micro-card--completion .micro-card__icon {
   color: oklch(0.32 0.11 154);
   background: oklch(0.93 0.045 154);
 }
 
+/* ── Progress chart card ──────────────────────────────────── */
 .progress-chart-bento {
   display: grid;
   min-height: 22rem;
@@ -391,9 +410,10 @@
   color: var(--clinical-blue);
   font-size: 0.9rem;
   font-weight: 900;
-  background: oklch(0.93 0.035 242);
+  background: var(--clinical-blue-soft);
 }
 
+/* SVG chart */
 .progress-chart {
   width: 100%;
   min-height: 15.4rem;
@@ -401,12 +421,12 @@
 }
 
 .chart-gridline {
-  stroke: oklch(0.84 0.018 244);
+  stroke: oklch(0.84 0.014 78);
   stroke-width: 1;
 }
 
 .chart-axis-line {
-  stroke: oklch(0.62 0.035 244);
+  stroke: oklch(0.62 0.025 78);
   stroke-width: 1.2;
 }
 
@@ -420,6 +440,7 @@
   font-size: 0.68rem;
 }
 
+/* Warm amber → gold gradient fill and stroke */
 .progress-area {
   fill: url("#progressArea");
 }
@@ -429,7 +450,7 @@
   stroke: url("#progressStroke");
   stroke-linecap: round;
   stroke-width: 3.1;
-  filter: drop-shadow(0 4px 6px oklch(0.5 0.14 248 / 0.14));
+  filter: drop-shadow(0 4px 6px oklch(0.44 0.16 52 / 0.16));
 }
 
 .progress-point {
@@ -442,6 +463,7 @@
   font-size: 0.76rem;
 }
 
+/* ── Square bento (arm chart) ─────────────────────────────── */
 .square-bento {
   display: grid;
   min-height: 18rem;
@@ -453,6 +475,7 @@
   padding: 20px;
 }
 
+/* ── Insight bento ────────────────────────────────────────── */
 .insight-bento {
   display: grid;
   min-height: 18rem;
@@ -462,6 +485,7 @@
   padding: 24px;
 }
 
+/* ── Diverging arm chart ──────────────────────────────────── */
 .diverging-chart {
   display: grid;
   min-height: 0;
@@ -495,7 +519,7 @@
   top: 0.1rem;
   bottom: 0.08rem;
   width: 1px;
-  background: oklch(0.54 0.07 248 / 0.56);
+  background: oklch(0.55 0.08 65 / 0.52);
   transform: translateX(-0.5px);
 }
 
@@ -523,7 +547,7 @@
   right: 0;
   top: 50%;
   height: 1px;
-  background: oklch(0.84 0.018 244);
+  background: oklch(0.84 0.014 78);
   transform: translateY(-50%);
 }
 
@@ -536,18 +560,21 @@
   transform: translateY(-50%);
 }
 
+/* Left arm — amber/bronze */
 .diverging-bar--left {
   right: 50%;
   border-radius: 999px 0 0 999px;
   background: linear-gradient(90deg, var(--clinical-blue-soft), var(--clinical-blue));
 }
 
+/* Right arm — warm gold */
 .diverging-bar--right {
   left: 50%;
   border-radius: 0 999px 999px 0;
-  background: linear-gradient(90deg, var(--clinical-gold), oklch(0.78 0.13 84));
+  background: linear-gradient(90deg, var(--clinical-gold), oklch(0.78 0.13 72));
 }
 
+/* ── Movement heatmap ─────────────────────────────────────── */
 .movement-heatmap-grid {
   display: grid;
   min-height: 0;
@@ -556,11 +583,16 @@
   gap: 0.52rem;
 }
 
+/* Warm amber heat — hue 68 instead of cold 244 */
 .movement-heatmap-cell {
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-md);
-  background: oklch(calc(0.965 - var(--heat) * 0.18) calc(0.022 + var(--heat) * 0.09) 244);
+  background: oklch(
+    calc(0.965 - var(--heat) * 0.18)
+    calc(0.018 + var(--heat) * 0.12)
+    68
+  );
   box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.62);
 }
 
@@ -571,22 +603,118 @@
   border-radius: 999px;
   background: oklch(1 0 0 / calc(0.18 + var(--heat) * 0.32));
   filter: blur(8px);
+  pointer-events: none;
 }
 
+.heatmap-cell-tip {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.08em;
+  border-radius: inherit;
+  background: oklch(0.24 0.06 38 / 0.78);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity 0.14s ease;
+  pointer-events: none;
+}
+
+.movement-heatmap-cell:hover .heatmap-cell-tip {
+  opacity: 1;
+}
+
+.heatmap-cell-tip__count {
+  font-size: clamp(1.1rem, 2.8vw, 1.55rem);
+  font-weight: 900;
+  line-height: 1;
+  color: #fff0bd;
+  letter-spacing: -0.02em;
+}
+
+.heatmap-cell-tip__label {
+  font-size: clamp(0.52rem, 1.1vw, 0.62rem);
+  font-weight: 600;
+  color: oklch(0.88 0.06 68);
+  line-height: 1;
+  margin-top: 0.1em;
+}
+
+.heatmap-cell-tip__pct {
+  font-size: clamp(0.72rem, 1.6vw, 0.88rem);
+  font-weight: 800;
+  color: oklch(0.82 0.12 68);
+  line-height: 1;
+  margin-top: 0.3em;
+}
+
+/* ── Heatmap arm toggle ───────────────────────────────────── */
+.heatmap-arm-toggle {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.2rem;
+  padding: 0.2rem;
+  border-radius: var(--radius-md);
+  background: oklch(0.91 0.018 68 / 0.55);
+}
+
+.heatmap-arm-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05rem;
+  padding: 0.28rem 0.56rem;
+  border: none;
+  border-radius: calc(var(--radius-md) - 2px);
+  background: transparent;
+  color: var(--clinical-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.heatmap-arm-btn:hover {
+  background: oklch(0.96 0.025 68 / 0.7);
+  color: var(--clinical-ink);
+}
+
+.heatmap-arm-btn.is-active {
+  background: oklch(1 0 0);
+  color: oklch(0.46 0.14 38);
+  box-shadow: 0 1px 3px oklch(0 0 0 / 0.10);
+}
+
+.heatmap-arm-btn__th {
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.heatmap-arm-btn__en {
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1;
+  opacity: 0.72;
+}
+
+/* ── Insight card ─────────────────────────────────────────── */
 .insight-title {
   display: flex;
   align-items: center;
   gap: 0.72rem;
 }
 
+/* Warm gold icon background */
 .insight-title > svg {
   width: 2.45rem;
   height: 2.45rem;
   flex: 0 0 auto;
   border-radius: var(--radius-md);
   padding: 0.6rem;
-  color: oklch(0.48 0.1 82);
-  background: oklch(0.94 0.05 86);
+  color: oklch(0.44 0.14 68);
+  background: oklch(0.91 0.07 74);
 }
 
 .insight-list {
@@ -604,6 +732,7 @@
   align-items: start;
 }
 
+/* Amber icon circles */
 .insight-list li > span {
   display: grid;
   width: 2rem;
@@ -611,16 +740,17 @@
   place-items: center;
   border-radius: 999px;
   color: var(--clinical-blue);
-  background: oklch(0.93 0.034 242);
+  background: var(--clinical-blue-soft);
 }
 
 .insight-list p {
   margin: 0;
   font-size: 0.94rem;
-  font-weight: 720;
-  line-height: 1.5;
+  font-weight: 700;
+  line-height: 1.55;
 }
 
+/* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 1180px) {
   .bento-dashboard-layout {
     grid-template-columns: 1fr;
